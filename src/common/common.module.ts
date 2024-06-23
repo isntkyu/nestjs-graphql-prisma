@@ -1,4 +1,15 @@
 import { Module } from '@nestjs/common';
+import { GqlJwtGuard } from './gql-jwt.guard';
+import { JwtModule } from '@nestjs/jwt';
 
-@Module({})
+@Module({
+  imports: [
+    JwtModule.register({
+      global: true,
+      secret: process.env.JWT_SECRET,
+      signOptions: { expiresIn: '2days' },
+    }),
+  ],
+  providers: [GqlJwtGuard],
+})
 export class CommonModule {}
