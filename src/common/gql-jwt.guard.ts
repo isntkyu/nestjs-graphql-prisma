@@ -1,4 +1,8 @@
-import { ExecutionContext, Injectable, UnauthorizedException } from "@nestjs/common";
+import {
+  ExecutionContext,
+  Injectable,
+  UnauthorizedException,
+} from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { AuthGuard } from '@nestjs/passport';
 import { GqlExecutionContext } from '@nestjs/graphql';
@@ -7,9 +11,9 @@ import { GqlExecutionContext } from '@nestjs/graphql';
 export class GqlJwtGuard extends AuthGuard('jwt') {
   constructor(
     private readonly userService: UserService,
-    private jwtService: JwtService
+    private jwtService: JwtService,
   ) {
-    super()
+    super();
   }
 
   async canAvtivate(context: ExecutionContext): Promise<boolean> {
@@ -20,13 +24,10 @@ export class GqlJwtGuard extends AuthGuard('jwt') {
       throw new UnauthorizedException('Invalid Token');
     }
     try {
-      const payload = await this.jwtService.verifyAsync(
-        token,
-        {
-          secret: process.env.JWT_SECRET
-        }
-      );
-      const userData  = await this.userService.findFirst({
+      const payload = await this.jwtService.verifyAsync(token, {
+        secret: process.env.JWT_SECRET,
+      });
+      const userData = await this.userService.findFirst({
         where: { id: { equals: payload.sub ?? '' } },
         include: { role: { include: { permissions: true } } },
       });
@@ -35,6 +36,5 @@ export class GqlJwtGuard extends AuthGuard('jwt') {
     } catch {
       throw new UnauthorizedException();
     }
-  }
   }
 }

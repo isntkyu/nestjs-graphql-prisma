@@ -12,6 +12,7 @@ import { CommonModule } from './common/common.module';
       driver: ApolloDriver,
       autoSchemaFile: join(process.cwd(), 'src/schema.graphql'),
       playground: process.env.ENV === 'dev',
+      buildSchemaOptions: { dateScalarMode: 'timestamp' },
       context: ({ req }) => ({ request: req }),
     }),
     CommonModule,
