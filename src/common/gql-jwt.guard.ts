@@ -10,7 +10,7 @@ import { GqlExecutionContext } from '@nestjs/graphql';
 @Injectable()
 export class GqlJwtGuard extends AuthGuard('jwt') {
   constructor(
-    private readonly userService: UserService,
+    // private readonly userService: UserService,
     private jwtService: JwtService,
   ) {
     super();
@@ -27,11 +27,11 @@ export class GqlJwtGuard extends AuthGuard('jwt') {
       const payload = await this.jwtService.verifyAsync(token, {
         secret: process.env.JWT_SECRET,
       });
-      const userData = await this.userService.findFirst({
-        where: { id: { equals: payload.sub ?? '' } },
-        include: { role: { include: { permissions: true } } },
-      });
-      req.user = userData;
+      // const userData = await this.userService.findFirst({
+      //   where: { id: { equals: payload.sub ?? '' } },
+      //   include: { role: { include: { permissions: true } } },
+      // });
+      // req.user = userData;
       return true;
     } catch {
       throw new UnauthorizedException();
