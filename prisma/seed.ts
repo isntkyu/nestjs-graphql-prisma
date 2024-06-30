@@ -2,23 +2,21 @@ import { PrismaClient, Prisma } from '@prisma/client';
 
 const prisma = new PrismaClient();
 
-const userData =
-  // : Prisma.UserCreateInput[]
-  [
-    {
-      name: 'tony',
-      email: 'tony@gmail.com',
-      posts: {
-        create: [
-          {
-            title: 'PGNP',
-            content: 'Prisma GraphQL Nestjs PostgreSQL',
-            published: true,
-          },
-        ],
-      },
+const userData: Prisma.UserCreateInput[] = [
+  {
+    name: 'tony',
+    email: 'tony@gmail.com',
+    posts: {
+      create: [
+        {
+          title: 'PGNP',
+          content: 'Prisma GraphQL Nestjs PostgreSQL',
+          published: true,
+        },
+      ],
     },
-  ];
+  },
+];
 
 async function main() {
   console.log(`Start seeding`);
