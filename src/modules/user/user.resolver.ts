@@ -14,7 +14,7 @@ import { User } from './user';
 import { Inject } from '@nestjs/common';
 import { PrismaService } from 'src/prisma.service';
 import { Post } from '../post/post';
-import { PostCreateInput } from '../post/resolvers.post';
+import { PostCreateInput } from '../post/post.resolver';
 
 @InputType()
 class UserUniqueInput {

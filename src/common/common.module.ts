@@ -1,9 +1,10 @@
 import { Module } from '@nestjs/common';
-import { GqlJwtGuard } from './gql-jwt.guard';
+import { GqlJwtGuard } from './guards/gql-jwt.guard';
 import { JwtModule } from '@nestjs/jwt';
-import { PostResolver } from './post/resolvers.post';
-import { UserResolver } from './user/resolvers.user';
+import { PostResolver } from '../modules/post/post.resolver';
+import { UserResolver } from '../modules/user/user.resolver';
 import { PrismaService } from 'src/prisma.service';
+import { UserService } from './services/user.service';
 
 @Module({
   imports: [
@@ -13,6 +14,6 @@ import { PrismaService } from 'src/prisma.service';
       signOptions: { expiresIn: '2days' },
     }),
   ],
-  providers: [GqlJwtGuard, UserResolver, PostResolver, PrismaService],
+  providers: [GqlJwtGuard, UserService],
 })
 export class CommonModule {}

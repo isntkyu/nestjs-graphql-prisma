@@ -1,5 +1,6 @@
 import { Field, Int, ObjectType } from '@nestjs/graphql';
 import { Post } from '../post/post';
+import { IsEmail } from 'class-validator';
 
 @ObjectType()
 export class User {
@@ -7,7 +8,7 @@ export class User {
   id: number;
 
   @Field()
-  // @IsEmail() cv
+  @IsEmail()
   email: string;
 
   @Field((type) => String, { nullable: true })
