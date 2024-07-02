@@ -1,6 +1,8 @@
 import { Module } from '@nestjs/common';
-import { GqlJwtGuard } from './gql-jwt.guard';
+import { GqlJwtGuard } from './guards/gql-jwt.guard';
 import { JwtModule } from '@nestjs/jwt';
+import { PrismaService } from 'src/prisma.service';
+import { UserService } from './services/user.service';
 
 @Module({
   imports: [
@@ -10,6 +12,6 @@ import { JwtModule } from '@nestjs/jwt';
       signOptions: { expiresIn: '2days' },
     }),
   ],
-  providers: [GqlJwtGuard],
+  providers: [GqlJwtGuard, UserService, PrismaService],
 })
 export class CommonModule {}
