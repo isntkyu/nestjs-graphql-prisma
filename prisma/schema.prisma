@@ -17,6 +17,8 @@ model User {
   id    Int     @id @default(autoincrement())
   email String  @unique
   name  String?
+  hashedPassword String
+  hashedRefreshToken String?
   posts Post[]
   createdAt DateTime   @default(now())
   updatedAt DateTime   @updatedAt
