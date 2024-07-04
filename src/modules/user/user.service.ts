@@ -23,6 +23,4 @@ export class UserService extends BaseCrudService<
   constructor(prisma: PrismaService, private readonly jwtService: JwtService) {
     super(prisma);
   }
-
-  // async login(args: LoginArgs) {}
 }

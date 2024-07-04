@@ -6,6 +6,7 @@ const userData: Prisma.UserCreateInput[] = [
   {
     name: 'tony',
     email: 'tony@gmail.com',
+    hashedPassword: 'aaaaa',
     posts: {
       create: [
         {

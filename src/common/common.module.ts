@@ -1,7 +1,6 @@
 import { Module } from '@nestjs/common';
-import { GqlJwtGuard } from './guards/gql-jwt.guard';
-import { JwtModule } from '@nestjs/jwt';
 import { PrismaService } from 'src/prisma.service';
+import { GqlJwtGuard } from '@/modules/auth/gql-jwt.guard';
 
 @Module({
   providers: [GqlJwtGuard, PrismaService],
