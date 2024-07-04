@@ -11,7 +11,6 @@ import { UserService } from '@/modules/user/user.service';
 @Injectable()
 export class GqlJwtGuard extends AuthGuard('jwt') {
   constructor(
-    private readonly userService: UserService,
     private jwtService: JwtService,
   ) {
     super();
@@ -29,11 +28,7 @@ export class GqlJwtGuard extends AuthGuard('jwt') {
         secret: process.env.JWT_SECRET,
       });
 
-      const userData = await this.userService.findFirst({
-        where: { id: { equals: payload.sub ?? '' } },
-        // include: { role: { include: { permissions: true } } },
-      });
-      req.user = userData;
+      req.user = payload;
       return true;
     } catch {
       throw new UnauthorizedException();
