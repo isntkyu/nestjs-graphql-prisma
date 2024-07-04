@@ -6,7 +6,6 @@ import {
 import { JwtService } from '@nestjs/jwt';
 import { AuthGuard } from '@nestjs/passport';
 import { GqlExecutionContext } from '@nestjs/graphql';
-import { UserService } from '@/modules/user/user.service';
 
 @Injectable()
 export class GqlJwtGuard extends AuthGuard('jwt') {
