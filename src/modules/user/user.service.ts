@@ -1,8 +1,8 @@
 import { Injectable } from '@nestjs/common';
-import { BaseCrudService } from './base.service';
 import { Prisma, User } from '@prisma/client';
 import { PrismaService } from 'src/prisma.service';
 import { JwtService } from '@nestjs/jwt';
+import { BaseCrudService } from '@/common/services/base.service';
 
 @Injectable()
 export class UserService extends BaseCrudService<
