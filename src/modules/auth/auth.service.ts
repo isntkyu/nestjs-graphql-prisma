@@ -33,10 +33,17 @@ export class AuthService {
   }
 
   private async issueRefreshToken(payload: TokenPayload) {
-    return await this.jwtService.signAsync(payload, {
+    const refreshToken = await this.jwtService.signAsync(payload, {
       secret: process.env.REFRESH_TOKEN_JWT_SECRET,
       expiresIn: '7d',
     });
+
+    await this.userService.update({
+      data: { hashedRefreshToken: refreshToken },
+      where: { id: payload.userId },
+    });
+
+    return refreshToken;
   }
 
   private async issueTokens(user: User): Promise<LoginResponse> {
