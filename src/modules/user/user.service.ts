@@ -19,7 +19,6 @@ export class UserService extends BaseCrudService<
   Prisma.UserDeleteArgs,
   Prisma.UserDeleteManyArgs
 > {
-  private saltRound = 10;
   constructor(prisma: PrismaService, private readonly jwtService: JwtService) {
     super(prisma);
   }

@@ -18,8 +18,8 @@ model User {
   email String  @unique
   name  String?
   hashedPassword String
-  hashedRefreshToken String?
   posts Post[]
+  refreshTokens RefreshToken[]
   createdAt DateTime   @default(now())
   updatedAt DateTime   @updatedAt
 }
@@ -34,4 +34,14 @@ model Post {
   authorId  Int?
   createdAt DateTime   @default(now())
   updatedAt DateTime   @updatedAt
+}
+
+model RefreshToken {
+  id         Int      @id @default(autoincrement())
+  token      String   @unique
+  expiresAt  DateTime
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+  userId     Int
+  user       User     @relation(fields: [userId], references: [id])
 }
