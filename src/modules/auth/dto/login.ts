@@ -1,6 +1,10 @@
 import { Field, InputType, ObjectType } from '@nestjs/graphql';
 import { IsEmail, IsNotEmpty } from 'class-validator';
 
+export interface TokenPayload {
+  userId: number;
+}
+
 @InputType()
 export class LoginInput {
   @Field()
