@@ -5,7 +5,7 @@ import { GraphQLModule } from '@nestjs/graphql';
 import { ApolloDriver, ApolloDriverConfig } from '@nestjs/apollo';
 import { join } from 'path';
 import { CommonModule } from './common/common.module';
-import { GraphqlApiModule } from './modules/graphql-api.module';
+import { AuthModule } from './modules/auth/auth.module';
 
 @Module({
   imports: [
@@ -17,7 +17,7 @@ import { GraphqlApiModule } from './modules/graphql-api.module';
       context: ({ req }) => ({ request: req }),
     }),
     CommonModule,
-    GraphqlApiModule,
+    AuthModule,
   ],
   controllers: [AppController],
   providers: [AppService],

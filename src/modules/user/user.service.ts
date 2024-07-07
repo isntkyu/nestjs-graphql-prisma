@@ -1,8 +1,8 @@
 import { Injectable } from '@nestjs/common';
-import { BaseCrudService } from './base.service';
 import { Prisma, User } from '@prisma/client';
 import { PrismaService } from 'src/prisma.service';
 import { JwtService } from '@nestjs/jwt';
+import { BaseCrudService } from '@/common/services/base.service';
 
 @Injectable()
 export class UserService extends BaseCrudService<
@@ -19,10 +19,7 @@ export class UserService extends BaseCrudService<
   Prisma.UserDeleteArgs,
   Prisma.UserDeleteManyArgs
 > {
-  private saltRound = 10;
   constructor(prisma: PrismaService, private readonly jwtService: JwtService) {
     super(prisma);
   }
-
-  // async login(args: LoginArgs) {}
 }

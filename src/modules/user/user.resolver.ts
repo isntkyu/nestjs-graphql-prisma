@@ -33,6 +33,9 @@ class UserCreateInput {
   @Field({ nullable: true })
   name: string;
 
+  @Field()
+  password: string;
+
   @Field((type) => [PostCreateInput], { nullable: true })
   posts: [PostCreateInput];
 }
@@ -68,6 +71,7 @@ export class UserResolver {
       data: {
         email: data.email,
         name: data.name,
+        hashedPassword: data.password,
         posts: {
           create: postData,
         },
