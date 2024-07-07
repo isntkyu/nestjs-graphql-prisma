@@ -10,4 +10,9 @@ export class AuthResolver {
   async login(@Args('loginInput') loginInput: LoginInput) {
     return await this.authService.login(loginInput);
   }
+
+  @Mutation(() => String)
+  async refreshToken(@@Args('refreshToken') refreshToken: string) {
+    // TODO 토큰 validate 후에 accessToken 발급
+  }
 }
