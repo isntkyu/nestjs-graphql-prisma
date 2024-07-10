@@ -15,6 +15,7 @@ import { Inject } from '@nestjs/common';
 import { PrismaService } from 'src/prisma.service';
 import { Post } from '../post/post';
 import { PostCreateInput } from '../post/post.resolver';
+import * as bcrypt from 'bcrypt';
 
 @InputType()
 class UserUniqueInput {
@@ -42,6 +43,8 @@ class UserCreateInput {
 
 @Resolver(User)
 export class UserResolver {
+  private saltRound = 10; // TODO DI
+
   constructor(
     @Inject(PrismaService)
     private prismaService: PrismaService,
@@ -71,7 +74,7 @@ export class UserResolver {
       data: {
         email: data.email,
         name: data.name,
-        hashedPassword: data.password,
+        hashedPassword: await bcrypt.hash(data.password, 10),
         posts: {
           create: postData,
         },

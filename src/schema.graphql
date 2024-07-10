@@ -25,6 +25,16 @@ type User {
   posts: [Post!]
 }
 
+type LoginResponse {
+  access_token: String!
+  refresh_token: String!
+}
+
+type RefreshTokenReponse {
+  access_token: String!
+  refresh_token: String!
+}
+
 type Query {
   allUsers: [User!]
   draftsByUser(userUniqueInput: UserUniqueInput!): [Post!]
@@ -36,7 +46,18 @@ input UserUniqueInput {
 }
 
 type Mutation {
+  login(loginInput: LoginInput!): LoginResponse!
+  refreshToken(refreshTokenInput: RefreshTokenInput!): RefreshTokenReponse!
   signupUser(data: UserCreateInput!): User!
+}
+
+input LoginInput {
+  email: String!
+  password: String!
+}
+
+input RefreshTokenInput {
+  refreshToken: String!
 }
 
 input UserCreateInput {

@@ -53,7 +53,7 @@ export class AuthService {
     await this.prismaService.refreshToken.create({
       data: {
         userId: payload.userId,
-        token: bcrypt.hash(refreshToken, this.saltRound),
+        token: refreshToken,
         expiresAt,
       },
     });
@@ -74,11 +74,11 @@ export class AuthService {
 
   async validateRefreshToken(refreshToken: string): Promise<User> {
     const token = await this.prismaService.refreshToken.findUnique({
-      where: { token: bcrypt.hash(refreshToken, this.saltRound) },
+      where: { token: refreshToken },
     });
 
     const now = new Date(Date.now());
-    if (token.expiresAt < now) {
+    if (!token || token.expiresAt < now) {
       throw new UnauthorizedException();
     }
 
@@ -90,7 +90,10 @@ export class AuthService {
   private async issueTokens(user: User): Promise<LoginResponse> {
     const payload: TokenPayload = { userId: user.id };
 
-    const accessToken = await this.jwtService.signAsync(payload);
+    const accessToken = await this.jwtService.signAsync(payload, {
+      secret: process.env.ACCESS_TOKEN_JWT_SECRET,
+      expiresIn: '2days',
+    });
     const refreshToken = await this.generateRefreshToken(payload);
 
     return {
