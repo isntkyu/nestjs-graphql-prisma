@@ -1,4 +1,8 @@
-import { BadRequestException, Injectable } from '@nestjs/common';
+import {
+  BadRequestException,
+  Injectable,
+  UnauthorizedException,
+} from '@nestjs/common';
 import {
   LoginInput,
   LoginResponse,
@@ -7,9 +11,10 @@ import {
 import { UserService } from '@/modules/user/user.service';
 import * as bcrypt from 'bcrypt';
 import { User } from '@/modules/user/user';
-import { JwtService } from '@nestjs/jwt';
+import { JwtService, TokenExpiredError } from '@nestjs/jwt';
 import * as process from 'process';
 import { PrismaService } from '@/prisma.service';
+import { RefreshTokenInput } from './dto/refresh-token';
 
 @Injectable()
 export class AuthService {
@@ -48,7 +53,7 @@ export class AuthService {
     await this.prismaService.refreshToken.create({
       data: {
         userId: payload.userId,
-        token: bcrypt.hash(refreshToken, this.saltRound),
+        token: refreshToken,
         expiresAt,
       },
     });
@@ -56,10 +61,39 @@ export class AuthService {
     return refreshToken;
   }
 
+  async refreshToken(
+    refreshTokenInput: RefreshTokenInput,
+  ): Promise<RefreshTokenInput> {
+    // validate
+    const oldRefreshToken = refreshTokenInput.refreshToken;
+
+    const user = await this.validateRefreshToken(oldRefreshToken);
+
+    return (await this.issueTokens(user)) as unknown as RefreshTokenInput;
+  }
+
+  async validateRefreshToken(refreshToken: string): Promise<User> {
+    const token = await this.prismaService.refreshToken.findUnique({
+      where: { token: refreshToken },
+    });
+
+    const now = new Date(Date.now());
+    if (!token || token.expiresAt < now) {
+      throw new UnauthorizedException();
+    }
+
+    return await this.userService.findFirst({
+      where: { id: token.userId },
+    });
+  }
+
   private async issueTokens(user: User): Promise<LoginResponse> {
     const payload: TokenPayload = { userId: user.id };
 
-    const accessToken = await this.jwtService.signAsync(payload);
+    const accessToken = await this.jwtService.signAsync(payload, {
+      secret: process.env.ACCESS_TOKEN_JWT_SECRET,
+      expiresIn: '2days',
+    });
     const refreshToken = await this.generateRefreshToken(payload);
 
     return {
